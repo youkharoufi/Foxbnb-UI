@@ -1,0 +1,90 @@
+
+<div class="global">
+
+  <form #registerForm="ngForm" (submit)="register()">
+    <h1 mat-dialog-title>Let's get you registered !</h1>
+    <div mat-dialog-content>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input matInput type="text" name="userName" #userName="ngModel" [(ngModel)]=" registerUser.userName" required>
+          <span class="span-color" *ngIf="userName.errors?.['required'] && userName.dirty">Your username is required</span>
+        </mat-form-field>
+      </div>
+
+      <div>
+    <mat-form-field>
+      <mat-label>Firstname</mat-label>
+      <input matInput type="text" name="firstname" #firstname="ngModel" [(ngModel)]="registerUser.firstname" required>
+      <span class="span-color" *ngIf="firstname.errors?.['required'] && firstname.dirty">Your firstname is required</span>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Lastname</mat-label>
+      <input matInput type="text" name="lastname" #lastname="ngModel" [(ngModel)]=" registerUser.lastname" required>
+      <span class="span-color" *ngIf="lastname.errors?.['required'] && lastname.touched">Your lastname is required</span>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput type="text" name="email" #email="ngModel" [(ngModel)]=" registerUser.email" required>
+      <span class="span-color" *ngIf="email.errors?.['required'] && email.touched">Your Email is required</span>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Phone Number</mat-label>
+      <input matInput type="text" name="phone" #phone="ngModel" [(ngModel)]=" registerUser.phoneNumber" required pattern="^\+?[1-9]\d{1,14}$">
+      <span class="span-color" *ngIf="phone.errors?.['required'] && phone.dirty">Your phone number is required</span>
+      <span class="span-color" *ngIf="phone.errors?.['pattern'] && phone.dirty">Please enter a valid phone number</span>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" name="regPassword" #regPassword="ngModel" [(ngModel)]=" registerUser.password" required>
+      <span class="span-color" *ngIf="regPassword.errors?.['required'] && regPassword.touched">Your password is required</span>
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field>
+      <mat-label>Password Confirmation</mat-label>
+      <input matInput type="password" name="passwordConf" #passwordConf="ngModel" [(ngModel)]="registerUser.passwordConfirmation" required>
+      <span class="span-color" *ngIf="passwordConf.errors?.['required'] && passwordConf.touched">The password confirmation is required</span>
+      <span class="span-color" *ngIf="passwordConf.value !== this.registerUser.password && passwordConf.touched">The password confirmation must match your password</span>
+    </mat-form-field>
+  </div>
+
+  <div style="margin-left:55px">
+      <mat-label>Profile Picture</mat-label>
+      <input type="file" name="pic" #picture="ngModel" [(ngModel)]="registerUser.profilePic" (change)="onFileSelected($event)" required>
+      <span class="span-color" *ngIf="picture.errors?.['required'] && picture.touched">Your profile picture is required</span>
+  </div><br><br>
+
+  <mat-form-field>
+    <mat-label>Select a Role</mat-label>
+    <mat-select disableRipple name="role" #role="ngModel" [(ngModel)]="registerUser.roleName" required>
+      <mat-option value="Client">Client</mat-option>
+      <mat-option value="Owner">Owner</mat-option>
+    </mat-select>
+    <span class="span-color" *ngIf="role.errors?.['required'] && role.touched">Your role is required</span>
+  </mat-form-field>
+
+
+      <div class="toTheRight" mat-dialog-actions>
+        <button mat-button type="submit" [disabled]="registerForm.invalid" color="warn">Register</button>
+        <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+      </div>
+      </div>
+  </form>
+</div>
+
+

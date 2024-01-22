@@ -1,0 +1,57 @@
+<div class="page-heading header-text">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <span class="breadcrumb"><a href="#">Home</a> / Properties</span>
+        <h3>Properties</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section properties">
+  <div class="container">
+    <ul class="properties-filter">
+      <li>
+        <a class="is_active" (click)="filterAll()" data-filter="*">Show All</a>
+      </li>
+      <li>
+        <a (click)="filterAppartments()" data-filter=".adv">Apartment</a>
+      </li>
+      <li>
+        <a (click)="filterVillaHouse()" data-filter=".str">Villa House</a>
+      </li>
+      <li>
+        <a (click)="filterPenthouse()" data-filter=".rac">Penthouse</a>
+      </li>
+    </ul>
+    <div class="row properties-box">
+      <div *ngFor="let property of currentProperties" class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
+        <div class="item">
+          <a href="property-details.html"><img src="assets/images/property-01.jpg" alt=""></a>
+          <span class="category">Luxury Villa</span>
+          <h6>${{property.price}}</h6>
+          <h4><a href="property-details.html">{{property.address}}</a></h4>
+          <ul>
+            <li>Bedrooms: <span>{{property.numberOfRooms}}</span></li>
+            <li>Bathrooms: <span>3</span></li>
+            <li>Area: <span>{{property.totalSpace}}m2</span></li>
+            <li>Floor: <span>{{property.floorNumber}}</span></li>
+            <li>Parking: <span>{{property.parkingAvailable ? 'Available' : 'Unavailable'}} </span></li>
+          </ul>
+          <div class="main-button">
+            <a href="property-details.html">Schedule a visit</a>
+          </div>
+        </div>
+      </div>
+
+      <mat-paginator [length]="properties.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[1, 2, 3]"
+               (page)="handlePageEvent($event)">
+      </mat-paginator>
+
+  </div>
+</div>
+
+

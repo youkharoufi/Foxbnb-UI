@@ -1,0 +1,29 @@
+<header class="header-area header-sticky">
+  <div class="container">
+      <div class="row">
+          <div class="col-12">
+              <nav class="main-nav">
+                  <!-- ***** Logo Start ***** -->
+                  <a href="index.html" class="logo">
+                      <h1>Villa</h1>
+                  </a>
+                  <!-- ***** Logo End ***** -->
+                  <!-- ***** Menu Start ***** -->
+                  <ul class="nav">
+                    <li class="hand"><a href="index.html" class="active">Home</a></li>
+                    <li class="hand"><a href="contact.html">Contact Us</a></li>
+                    <li class="hand"><a routerLink="/property-list">Properties</a></li>
+                    <li class="hand" *ngIf="(user$ | async) === null"(click)="openLoginDialog()"><a>Login</a></li>
+                    <li class="hand" *ngIf="(user$ | async) === null" (click)="openRegisterDialog()"><a>Register</a></li>
+                    <li class="hand" *ngIf="(user$ | async) !== null" (click)="logout()"><a>Logout</a></li>
+                    <li class="hand"><a href="#"><i class="fa fa-calendar"></i> Schedule a visit</a></li>
+                </ul>
+                  <a class='menu-trigger'>
+                      <span>Menu</span>
+                  </a>
+                  <!-- ***** Menu End ***** -->
+              </nav>
+          </div>
+      </div>
+  </div>
+</header>

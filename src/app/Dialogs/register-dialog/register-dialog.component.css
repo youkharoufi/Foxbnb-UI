@@ -1,0 +1,12 @@
+.global{
+  text-align: center;
+}
+
+.toTheRight{
+  display:flex;
+  justify-content: right;
+}
+
+.span-color{
+  color:darkred;
+}
