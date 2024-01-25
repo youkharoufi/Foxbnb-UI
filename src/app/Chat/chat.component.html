@@ -1,0 +1,42 @@
+<ng-container>
+  <div>
+  <form #chatForm (submit)="sendMessage()">
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="user-info">
+          <span *ngIf="owner!==undefined" class="user-name">{{owner.firstname}} {{owner.lastname}}</span>
+        </div>
+        <div class="chat-date">{{currentDate | date:'medium'}}</div>
+      </div>
+      <div class="chat-messages">
+        <!-- Loop over each message in combinedMessages -->
+        <div *ngFor="let message of combinedMessages; trackBy: trackByMessages"
+     [ngClass]="{'sent-message': message.senderId === currentUser.id, 'received-message': message.senderId !== currentUser.id}">
+
+          <!-- Display the appropriate avatar -->
+          <img [src]="message.senderId === currentUser.id ? currentUser.profilePicUrl : owner.profilePicUrl"
+               alt="Avatar"
+               class="avatar">
+
+          <!-- Message content -->
+          <div class="message-content">
+            <div>
+              <span class="timestamp">{{ message.dateSent | date:'shortTime' }}</span>
+            </div>
+            <div>
+              <p>{{ message.content }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input">
+        <input type="text" placeholder="Enter message..." name="message" #message="ngModel" [(ngModel)]="newMessage" required>
+        <button [disabled]="chatForm['invalid']" type="submit">Send</button>
+      </div>
+    </div>
+    </form>
+  </div>
+
+
+</ng-container>
+

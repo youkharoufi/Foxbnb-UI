@@ -1,0 +1,64 @@
+<div class="page-heading header-text">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <span class="breadcrumb"><a href="#">Home</a>  /  Single Property</span>
+        <h3>Single Property</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section best-deal">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="section-heading">
+          <h6>| Best Deal</h6>
+          <h2>Find Your Best Deal Right Now!</h2>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="tabs-content">
+          <div class="row">
+            <div class="nav-wrapper ">
+
+            </div>
+            <div *ngIf="property" class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="appartment" role="tabpanel" aria-labelledby="appartment-tab">
+                <div class="row">
+                  <div class="col-lg-3">
+                    <div class="info-table">
+                      <ul>
+                        <li>Total Flat Space <span>{{property.totalSpace}} m2</span></li>
+                        <li>Floor number <span>{{property.floorNumber}}</span></li>
+                        <li>Number of rooms <span>{{property.numberOfRooms}}</span></li>
+                        <li>Parking Available <span>{{property.parkingAvailable ? 'Available' : 'Unavailable'}}</span></li>
+                        <li>Payment Process <span>Bank</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <img src="assets/images/deal-01.jpg" alt="">
+                  </div>
+                  <div class="col-lg-3">
+                    <h4>All Info</h4>
+                    <p>{{property.infoParagraph}}</p>
+                    <div class="icon-button">
+                      <a routerLink="/chat/{{property.ownerId}}"><i class="fa fa-calendar"></i> Chat with the Owner !</a>
+                      <a (click)="openDialog()" style="margin-top:15px; color:white; cursor: pointer;"><i class="fa fa-calendar"></i> Reserve period on calendar</a>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+

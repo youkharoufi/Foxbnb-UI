@@ -9,4 +9,5 @@ export interface Property{
   parkingAvailable:boolean;
   address:string;
   price:number;
+  photoUrl:string;
 }

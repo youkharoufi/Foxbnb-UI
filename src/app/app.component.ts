@@ -11,6 +11,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { UserService } from './Services/user.service';
 import { routes } from './app.routes';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Component({
@@ -38,6 +39,7 @@ export class AppComponent {
 
     public sendMessage(content: string) {
       const message : Message = {
+        id:uuidv4(),
         senderId:'6bf26952-f716-40c7-83ed-5b695f06881c',
         receiverId:'0020216b-7473-491c-b131-2d6d5040c09a',
         dateSent: new Date(),

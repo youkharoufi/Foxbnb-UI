@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../Models/messages'; // Adjust the path as per your structure
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class ChatService {
     private messageReceivedSource = new BehaviorSubject<Message | null>(null);
     public messageReceived = this.messageReceivedSource.asObservable();
 
-    constructor() {
+    baseUrl = environment.API_URL;
+
+    constructor(private http : HttpClient) {
         this.buildConnection();
         this.startConnection();
     }
@@ -35,5 +39,13 @@ export class ChatService {
     public sendMessage(chatMessage: Message) {
         this.hubConnection.invoke('SendMessage', chatMessage)
             .catch(err => console.error('Error while sending message: ' + err));
+    }
+
+    getSentMessages(userId:string, receiverId:string): Observable<Message[]>{
+      return this.http.get<Message[]>(this.baseUrl+"messages/get-sent-messages/"+userId+"/"+receiverId);
+    }
+
+    getReceivedMessages(senderId:string, userId:string): Observable<Message[]>{
+      return this.http.get<Message[]>(this.baseUrl+"messages/get-received-messages/"+senderId+"/"+userId);
     }
 }

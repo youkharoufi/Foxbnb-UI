@@ -1,0 +1,7 @@
+/* calendar-dialog.component.css */
+:ng-deep .custom-disabled-date {
+  color: #757575; /* Gray out the date */
+  pointer-events: none; /* Prevent clicking */
+  text-decoration: line-through; /* Cross out the date */
+  background-color: #f0f0f0; /* Change background to indicate unavailability */
+}

@@ -26,12 +26,12 @@
       </li>
     </ul>
     <div class="row properties-box">
-      <div *ngFor="let property of currentProperties" class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv">
+      <div (click)="redirectToDetails(property.id)" *ngFor="let property of currentProperties" class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv hand">
         <div class="item">
-          <a href="property-details.html"><img src="assets/images/property-01.jpg" alt=""></a>
+          <a><img src="assets/images/property-01.jpg" alt=""></a>
           <span class="category">Luxury Villa</span>
           <h6>${{property.price}}</h6>
-          <h4><a href="property-details.html">{{property.address}}</a></h4>
+          <h4><a>{{property.address}}</a></h4>
           <ul>
             <li>Bedrooms: <span>{{property.numberOfRooms}}</span></li>
             <li>Bathrooms: <span>3</span></li>
@@ -40,7 +40,7 @@
             <li>Parking: <span>{{property.parkingAvailable ? 'Available' : 'Unavailable'}} </span></li>
           </ul>
           <div class="main-button">
-            <a href="property-details.html">Schedule a visit</a>
+            <a>Schedule a visit</a>
           </div>
         </div>
       </div>

@@ -38,4 +38,8 @@ export class UserService {
     localStorage.removeItem('user');
     this.user.next(null);
   }
+
+  getUserById(userId:string): Observable<ApplicationUser>{
+    return this.http.get(this.baseUrl+"usersManagement/find-user-by-id/"+userId);
+  }
 }

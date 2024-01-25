@@ -1,0 +1,27 @@
+<form #reservationForm="ngForm" (submit)="makeReservation()">
+
+  <h1 mat-dialog-title>Hi ! Schedule your stay in the calendar below !</h1>
+<div mat-dialog-content>
+
+  <mat-form-field class="example-form-field">
+    <mat-label>First campaign</mat-label>
+    <mat-date-range-input [rangePicker]="campaignOnePicker" [dateFilter]="unavailableDays">
+      <input matStartDate placeholder="Start date" name="start" #start="ngModel" [(ngModel)]="startDate" (dateChange)="onDateRangeChanged()">
+      <input matEndDate placeholder="End date" name="end" #end="ngModel" [(ngModel)]="endDate" (dateChange)="onDateRangeChanged()">
+    </mat-date-range-input>
+    <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+    <mat-date-range-picker #campaignOnePicker [dateClass]="dateClass"></mat-date-range-picker>
+  </mat-form-field>
+
+
+
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button type="button" (click)="onNoClick()">No Thanks</button>
+  <button mat-button type="submit" cdkFocusInitial>Ok</button>
+</div>
+
+</form>
+
