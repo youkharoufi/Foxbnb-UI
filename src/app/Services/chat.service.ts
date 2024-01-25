@@ -37,6 +37,7 @@ export class ChatService {
     }
 
     public sendMessage(chatMessage: Message) {
+
         this.hubConnection.invoke('SendMessage', chatMessage)
             .catch(err => console.error('Error while sending message: ' + err));
     }
