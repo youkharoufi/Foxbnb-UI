@@ -57,15 +57,6 @@ export class ChatComponent implements OnInit{
 
     if(localUser !== null && localUser !== undefined){
       this.currentUser = localUser;
-      // forkJoin({
-      //   received: this.chatService.getReceivedMessages(this.owner.id!, this.currentUser.id!),
-      //   sent: this.chatService.getSentMessages(this.currentUser.id!, this.owner.id!)
-      // }).subscribe(results => {
-      //   this.receivedMessages = results.received;
-      //   this.sentMessages = results.sent;
-      //   this.combineAndSortMessages();
-      //   console.log(this.combinedMessages);
-      // });
       this.chatService.getReceivedMessages(this.currentUser.id!, this.owner.id!).subscribe({
         next:(values:Message[])=>{
           this.receivedMessages = values;

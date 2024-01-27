@@ -1,6 +1,5 @@
-import { DateFilterFn, MatCalendarCellCssClasses, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
 import { Component, Inject, NO_ERRORS_SCHEMA, OnInit, ViewEncapsulation } from '@angular/core';
-import { DateRangeRes } from '../../Models/date-range';
 import { PropertyService } from '../../Services/property.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -10,19 +9,23 @@ import { MatInputModule } from '@angular/material/input';
 import { MAT_DATE_LOCALE, provideNativeDateAdapter } from '@angular/material/core';
 import { MatNativeDateModule } from '@angular/material/core';
 import { v4 as uuidv4 } from 'uuid';
-import { BsDatepickerConfig, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-
-
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { DayInfo } from '../../Models/day-info';
+import { DayInfoDto } from '../../Models/day-info-dto';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import {MatIconModule} from '@angular/material/icon';
 
 export interface Data{
   id:string;
 }
-
 @Component({
   selector: 'app-calendar-dialog',
   standalone: true,
   imports: [ FormsModule, MatFormFieldModule,
-    MatNativeDateModule, MatDialogModule, MatInputModule, MatDatepickerModule],
+    MatNativeDateModule, MatDialogModule, MatInputModule,
+    MatDatepickerModule, CommonModule, MatButtonModule,
+    MatIconModule],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-US' },
     provideNativeDateAdapter()
@@ -34,109 +37,143 @@ export interface Data{
 })
 export class CalendarDialogComponent implements OnInit{
 
-  reservedDates:DateRangeRes[]=[];
+  reservedDates:DayInfo[]=[];
+  oldDates:DayInfo[]=[];
   startDate!:Date;
   endDate!:Date;
   reservationForm!: NgForm;
 
   bsConfig!: Partial<BsDatepickerConfig>;
   selectedDateRange!: Date[];
+  bookedDates:Date[]=[];
+  selectedDates: DayInfo[] = [];
 
-  constructor(private propertyService: PropertyService,  public dialogRef: MatDialogRef<CalendarDialogComponent>,
+  constructor(private propertyService: PropertyService, public dialogRef: MatDialogRef<CalendarDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Data){}
 
-  ngOnInit(): void{
-    this.propertyService.getAllReservationsForSpecificProperty(this.data.id).subscribe({
-      next:(values: DateRangeRes[])=>{
-        if(values === null){
-          console.log("null");
-        }else{
-          this.reservedDates = values;
-          console.log(this.reservedDates)
-        }
+    ngOnInit(): void {
+      this.oldDates = [];
+      this.propertyService.getAllReservationsForSpecificProperty(this.data.id).subscribe({
+        next: (values: DayInfo[]) => {
+          console.log(this.reservedDates);
+            this.oldDates = values;
 
+        }
+      });
+    }
+
+    unavailableDays = (d: Date): boolean => {
+      // Ensure 'd' is a Date object
+      const inputDate = new Date(d);
+
+      for (let disabledDate of this.oldDates) {
+        // Convert 'disabledDate.date' from string to Date object if necessary
+        const disabledDateObj = new Date(disabledDate.date);
+
+        if (
+          inputDate.getDate() === disabledDateObj.getDate() &&
+          inputDate.getMonth() === disabledDateObj.getMonth() &&
+          inputDate.getFullYear() === disabledDateObj.getFullYear()
+        ) {
+          // Date is in the reservedDates array, so disable it
+          return false;
+        }
       }
-    })
-  }
-
-  dateClass = (date: Date): MatCalendarCellCssClasses => {
-    return 'custom-disabled-date'; // Apply to all dates to test
-  }
-
-
-  private isIntervalReserved(start: Date, end: Date): boolean {
-    for (let reserved of this.reservedDates) {
-        if (start < reserved.endDate && end > reserved.startDate) {
-            return true;
-        }
-    }
-    return false;
-}
-
-myFilter = (d: Date | null): boolean => {
-  if (d) {
-    return !this.isIntervalReserved(d, d);
-  }
-  return true;
-}
-
-  onDateRangeChanged(): void {
-    if (this.startDate && this.endDate) {
-        if (this.isIntervalReserved(this.startDate, this.endDate)) {
-
-          console.log("Interval already reserved !")
-        } else {
-            console.log("Correct interval");
-            // this.makeReservation();
-        }
-    }
-}
-
-  makeReservation(){
-    const reservationRange : DateRangeRes ={
-      id:uuidv4(),
-      propertyId:this.data.id,
-      startDate:new Date(this.startDate),
-      endDate:new Date(this.endDate),
-      daysInRange:[]
+      // Date is not in the reservedDates array, so enable it
+      return true;
     };
 
-    console.log(reservationRange);
 
-    this.propertyService.makeReservation(reservationRange).subscribe({
-      next:(value:DateRangeRes)=>{
-        console.log(value.startDate+" reserved... "+value.endDate)
+
+
+
+onStartDateChange(event: MatDatepickerInputEvent<Date>) {
+  this.updateSelectedDates();
+}
+
+onEndDateChange(event: MatDatepickerInputEvent<Date>) {
+  this.updateSelectedDates();
+}
+
+updateSelectedDates() {
+  if (this.startDate && this.endDate) {
+    // Clear the current selectedDates
+    this.selectedDates = [];
+    this.reservedDates = [];
+    for (let d = new Date(this.startDate); d <= new Date(this.endDate); d.setDate(d.getDate() + 1)) {
+      // Create a new Date object for the current day
+      let currentDay = new Date(d);
+      let dateString = currentDay.toISOString().split('T')[0];
+
+      const formData = new FormData();
+      formData.append('dayString', dateString);
+      this.propertyService.isBooked(this.data.id, formData).subscribe({
+        next:(value:boolean)=>{
+
+          console.log(value)
+
+          if(value === false){
+
+          let dayInfo = {
+            id: uuidv4(),
+            propertyId: this.data.id,
+            date: currentDay, // Use the new Date object here
+            booked: true,
+          }
+          this.oldDates.push(dayInfo)
+          this.reservedDates.push(dayInfo);
+          console.log(this.reservedDates);
+          }else{
+            let dayInfo = {
+              id: uuidv4(),
+              propertyId: this.data.id,
+              date: currentDay, // Use the new Date object here
+              booked: true,
+            }
+            this.selectedDates.push(dayInfo);
+          }
+
+          // Proceed to the next day regardless of whether it was booked
+
+        }
+      });
+
+
+    }
+    }
+
+  }
+
+
+
+
+  makeReservation(){
+
+    const allDayNga: Date[]=[];
+
+    console.log(this.reservedDates);
+    this.reservedDates.forEach((d)=>{
+      allDayNga.push(new Date(d.date))
+    })
+
+    const dayInfoDto : DayInfoDto = {
+      propertyId:this.data.id,
+      allDaysToBook: allDayNga
+    }
+    this.propertyService.makeReservation(dayInfoDto).subscribe({
+      next:(value:DayInfo[])=>{
+        console.log("Skusku");
       }
     });
+    this.reservedDates = [];
+    this.selectedDates= [];
     this.onNoClick();
   }
 
   onNoClick(): void {
+    this.reservedDates = [];
+    this.selectedDates = [];
     this.dialogRef.close();
   }
-
-  unavailableDays: DateFilterFn<Date | null> = (calendarDate: Date | null): boolean => {
-    if (!calendarDate) {
-      return true;
-    }
-
-    const calendarDateOnly = new Date(calendarDate.getFullYear(), calendarDate.getMonth(), calendarDate.getDate());
-
-    // Check if the date is in the past
-    if (calendarDateOnly < new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())) {
-      return false;
-    }
-
-    // Check if the date is reserved
-    return !this.reservedDates.some(range => {
-      return range.daysInRange.some(reservedDay => {
-        const reservedDayDate = new Date(reservedDay);
-        return calendarDateOnly.getTime() === reservedDayDate.getTime();
-      });
-    });
-  };
-
-
-
 
 }

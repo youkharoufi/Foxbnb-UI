@@ -6,21 +6,33 @@
   <mat-form-field class="example-form-field">
     <mat-label>First campaign</mat-label>
     <mat-date-range-input [rangePicker]="campaignOnePicker" [dateFilter]="unavailableDays">
-      <input matStartDate placeholder="Start date" name="start" #start="ngModel" [(ngModel)]="startDate" (dateChange)="onDateRangeChanged()">
-      <input matEndDate placeholder="End date" name="end" #end="ngModel" [(ngModel)]="endDate" (dateChange)="onDateRangeChanged()">
+      <input matStartDate placeholder="Start date" name="start" #start="ngModel" (dateChange)="onStartDateChange($event)" [(ngModel)]="startDate">
+      <input matEndDate placeholder="End date" name="end" #end="ngModel" (dateChange)="onEndDateChange($event)" [(ngModel)]="endDate">
     </mat-date-range-input>
     <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
     <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
-    <mat-date-range-picker #campaignOnePicker [dateClass]="dateClass"></mat-date-range-picker>
+    <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
   </mat-form-field>
 
+<div *ngIf="reservedDates.length > 0">
+  <p>You are about to book these dates : </p>
+<div *ngFor="let reservedDate of reservedDates">
+  <p>{{reservedDate.date| date:'fullDate'}}</p>
+</div>
+</div>
 
+<div *ngIf="selectedDates.length > 0">
+  <p><mat-icon>warning</mat-icon> Warning : These dates are already booked by someone else</p>
+<div *ngFor="let selectedDate of selectedDates">
+  <p>{{selectedDate.date| date:'fullDate'}}</p>
+</div>
+</div>
 
 
 </div>
 <div mat-dialog-actions>
-  <button mat-button type="button" (click)="onNoClick()">No Thanks</button>
-  <button mat-button type="submit" cdkFocusInitial>Ok</button>
+  <button mat-button type="button" color="primary" (click)="onNoClick()">No Thanks</button>
+  <button mat-button type="submit" color="warn" cdkFocusInitial>Ok</button>
 </div>
 
 </form>

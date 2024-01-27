@@ -16,7 +16,7 @@
                     <li class="hand" *ngIf="(user$ | async) === null"(click)="openLoginDialog()"><a>Login</a></li>
                     <li class="hand" *ngIf="(user$ | async) === null" (click)="openRegisterDialog()"><a>Register</a></li>
                     <li class="hand" *ngIf="(user$ | async) !== null" (click)="logout()"><a>Logout</a></li>
-                    <li class="hand"><a href="#"><i class="fa fa-calendar"></i> Schedule a visit</a></li>
+                    <li class="hand" ><a href="#"><i class="fa fa-calendar"></i>Chat</a></li>
                 </ul>
                   <a class='menu-trigger'>
                       <span>Menu</span>

@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environment/environment';
 import { Observable } from 'rxjs';
 import { Property } from '../Models/property';
-import { DateRangeRes } from '../Models/date-range';
+import { DayInfo } from '../Models/day-info';
+import { DayInfoDto } from '../Models/day-info-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,15 @@ export class PropertyService{
     return this.http.get<Property[]>(this.baseUrl+"property/properties-by-type/"+type);
   }
 
-  makeReservation(reservation:DateRangeRes): Observable<DateRangeRes>{
-    return this.http.post<DateRangeRes>(this.baseUrl+"property/make-reservation", reservation)
+  makeReservation(daysToBook:DayInfoDto): Observable<DayInfo[]>{
+    return this.http.post<DayInfo[]>(this.baseUrl+"property/make-reservation", daysToBook)
   }
 
-  getAllReservationsForSpecificProperty(propertyId:string): Observable<DateRangeRes[]>{
-    return this.http.get<DateRangeRes[]>(this.baseUrl+"property/get-all-reservations/"+propertyId);
+  getAllReservationsForSpecificProperty(propertyId:string): Observable<DayInfo[]>{
+    return this.http.get<DayInfo[]>(this.baseUrl+"property/get-all-reservations/"+propertyId);
+  }
+
+  isBooked(propertyId:string, dayString:FormData): Observable<boolean>{
+    return this.http.post<boolean>(this.baseUrl+"property/is-booked/"+propertyId, dayString)
   }
 }
