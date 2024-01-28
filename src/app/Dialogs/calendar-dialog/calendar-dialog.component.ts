@@ -77,11 +77,14 @@ export class CalendarDialogComponent implements OnInit{
       for (let disabledDate of this.oldDates) {
         // Convert 'disabledDate.date' from string to Date object if necessary
         const disabledDateObj = new Date(disabledDate.date);
+        const currentDate = new Date();
 
         if (
-          inputDate.getDate() === disabledDateObj.getDate() &&
+          (inputDate.getDate() === disabledDateObj.getDate() &&
           inputDate.getMonth() === disabledDateObj.getMonth() &&
-          inputDate.getFullYear() === disabledDateObj.getFullYear()
+          inputDate.getFullYear() === disabledDateObj.getFullYear())
+          || (inputDate < currentDate)
+
         ) {
           // Date is in the reservedDates array, so disable it
           return false;
