@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-12">
-        <span class="breadcrumb"><a href="#">Home</a> / Properties</span>
+        <span class="breadcrumb"><a href="#">Reservations</a> / Properties</span>
         <h3>Properties</h3>
       </div>
     </div>
@@ -11,22 +11,8 @@
 
 <div class="section properties">
   <div class="container">
-    <ul class="properties-filter">
-      <li>
-        <a class="is_active" (click)="filterAll()" data-filter="*">Show All</a>
-      </li>
-      <li>
-        <a (click)="filterAppartments()" data-filter=".adv">Apartment</a>
-      </li>
-      <li>
-        <a (click)="filterVillaHouse()" data-filter=".str">Villa House</a>
-      </li>
-      <li>
-        <a (click)="filterPenthouse()" data-filter=".rac">Penthouse</a>
-      </li>
-    </ul>
     <div class="row properties-box">
-      <div (click)="redirectToDetails(property.id)" *ngFor="let property of currentProperties" class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv hand">
+      <div *ngFor="let property of actualSingleProperties" class="col-lg-4 col-md-6 align-self-center mb-30 properties-items col-md-6 adv hand">
         <div class="item">
           <a><img [src]="property.photoUrl" alt=""></a>
           <span class="category">Luxury Villa</span>
@@ -38,18 +24,14 @@
             <li>Area: <span>{{property.totalSpace}}m2</span></li>
             <li>Floor: <span>{{property.floorNumber}}</span></li>
             <li>Parking: <span>{{property.parkingAvailable ? 'Available' : 'Unavailable'}} </span></li>
+            <li style="display:block">Reserved Days :</li>
+              <li style="display:block" *ngFor="let reservation of reservations"><span *ngIf="reservation.propertyId == property.id">{{reservation.date | date:'fullDate'}} </span></li>
           </ul>
           <div class="main-button">
             <a>Schedule a visit</a>
           </div>
         </div>
       </div>
-
-      <mat-paginator [length]="properties.length"
-               [pageSize]="pageSize"
-               [pageSizeOptions]="[1, 2, 3]"
-               (page)="handlePageEvent($event)">
-      </mat-paginator>
 
   </div>
 </div>

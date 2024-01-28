@@ -1,0 +1,21 @@
+.example-card {
+  max-width: 400px;
+}
+
+.space{
+  margin : 15px;
+}
+
+.center-btn{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically if needed */
+  width:100%;
+}
+

@@ -10,6 +10,7 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { ChatService } from '../../Services/chat.service';
 
 @Component({
   selector: 'app-login-dialog',
@@ -30,7 +31,7 @@ export class LoginDialogComponent {
 
 
   constructor(private userService: UserService, public dialogRef: MatDialogRef<LoginDialogComponent>,
-    private _snackBar: MatSnackBar){}
+    private _snackBar: MatSnackBar, private chatService: ChatService){}
 
 
   openSnackBarSuccess() {
@@ -52,9 +53,17 @@ export class LoginDialogComponent {
   }
 
   login(){
+
     this.userService.login(this.loginUser).subscribe({
       next:(value:ApplicationUser)=>{
-        //this.userService.updateUser(value);
+
+
+        this.chatService.getUnreadMessagesCount(value?.id!).subscribe({
+          next:(value:number)=>{
+            this.chatService.updateUnreadMessagesCount(value);
+          }
+        })
+
         this.onNoClick();
         this.openSnackBarSuccess();
       },

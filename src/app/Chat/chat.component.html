@@ -4,7 +4,7 @@
     <div class="chat-container">
       <div class="chat-header">
         <div class="user-info">
-          <span *ngIf="owner!==undefined" class="user-name">{{owner.firstname}} {{owner.lastname}}</span>
+          <span *ngIf="otherUser!==undefined" class="user-name">{{otherUser.firstname}} {{otherUser.lastname}}</span>
         </div>
         <div class="chat-date">{{currentDate | date:'medium'}}</div>
       </div>
@@ -14,7 +14,7 @@
      [ngClass]="{'sent-message': message.senderId === currentUser.id, 'received-message': message.senderId !== currentUser.id}">
 
           <!-- Display the appropriate avatar -->
-          <img [src]="message.senderId === currentUser.id ? currentUser.profilePicUrl : owner.profilePicUrl"
+          <img [src]="message.senderId === currentUser.id ? currentUser.profilePicUrl : otherUser.profilePicUrl"
                alt="Avatar"
                class="avatar">
 

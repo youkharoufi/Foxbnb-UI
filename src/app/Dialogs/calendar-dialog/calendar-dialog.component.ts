@@ -15,6 +15,7 @@ import { DayInfoDto } from '../../Models/day-info-dto';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { ApplicationUser } from '../../Models/applicationUser';
 
 export interface Data{
   id:string;
@@ -48,6 +49,8 @@ export class CalendarDialogComponent implements OnInit{
   bookedDates:Date[]=[];
   selectedDates: DayInfo[] = [];
 
+  currentUser!:ApplicationUser;
+
   constructor(private propertyService: PropertyService, public dialogRef: MatDialogRef<CalendarDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Data){}
 
@@ -60,6 +63,11 @@ export class CalendarDialogComponent implements OnInit{
 
         }
       });
+
+      const localUser = JSON.parse(localStorage.getItem('user')!);
+      if(localUser !== null && localUser !== undefined){
+        this.currentUser = localUser;
+      }
     }
 
     unavailableDays = (d: Date): boolean => {
@@ -117,6 +125,7 @@ updateSelectedDates() {
           let dayInfo = {
             id: uuidv4(),
             propertyId: this.data.id,
+            userId:this.currentUser.id!,
             date: currentDay, // Use the new Date object here
             booked: true,
           }
@@ -127,6 +136,7 @@ updateSelectedDates() {
             let dayInfo = {
               id: uuidv4(),
               propertyId: this.data.id,
+              userId:this.currentUser.id!,
               date: currentDay, // Use the new Date object here
               booked: true,
             }
@@ -158,6 +168,7 @@ updateSelectedDates() {
 
     const dayInfoDto : DayInfoDto = {
       propertyId:this.data.id,
+      userId:this.currentUser.id!,
       allDaysToBook: allDayNga
     }
     this.propertyService.makeReservation(dayInfoDto).subscribe({

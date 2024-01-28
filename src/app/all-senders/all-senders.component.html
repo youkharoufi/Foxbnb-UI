@@ -1,0 +1,39 @@
+<div class="page-heading header-text">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <span class="breadcrumb"><a href="#">Home</a> / Users</span>
+        <h3>Users</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let sender of allSenders">
+    <mat-card class="example-card space">
+      <mat-card-header>
+        <mat-card-title>{{sender.firstname}} {{sender.lastname}}</mat-card-title>
+        <mat-card-subtitle>Phone Number : {{sender.phoneNumber}}</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image [src]="sender.profilePicUrl" alt="Photo of a Shiba Inu">
+      <mat-card-actions>
+        <div class="button-container" *ngFor="let unreadCount of unreadSenderUsers">
+        <ng-container *ngIf="unreadSenderUsers.length > 0">
+            <button mat-raised-button color="primary" routerLink="/chat/{{sender.id}}" [matBadge]="unreadCount.count" matBadgeColor="warn">CHAT</button>
+        </ng-container>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+
+
+      <mat-paginator [length]="senders.length"
+               [pageSize]="pageSize"
+               [pageSizeOptions]="[1, 2, 3]"
+               (page)="handlePageEvent($event)">
+      </mat-paginator>
+
+
+
+

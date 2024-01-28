@@ -28,7 +28,7 @@ export class PropertyService{
   }
 
   makeReservation(daysToBook:DayInfoDto): Observable<DayInfo[]>{
-    return this.http.post<DayInfo[]>(this.baseUrl+"property/make-reservation", daysToBook)
+    return this.http.post<DayInfo[]>(this.baseUrl+"property/make-reservation", daysToBook);
   }
 
   getAllReservationsForSpecificProperty(propertyId:string): Observable<DayInfo[]>{
@@ -36,6 +36,10 @@ export class PropertyService{
   }
 
   isBooked(propertyId:string, dayString:FormData): Observable<boolean>{
-    return this.http.post<boolean>(this.baseUrl+"property/is-booked/"+propertyId, dayString)
+    return this.http.post<boolean>(this.baseUrl+"property/is-booked/"+propertyId, dayString);
+  }
+
+  getReservationsByUserId(userId:string): Observable<DayInfo[]>{
+    return this.http.get<DayInfo[]>(this.baseUrl+"property/get-reserved-days-by-userId/"+userId);
   }
 }

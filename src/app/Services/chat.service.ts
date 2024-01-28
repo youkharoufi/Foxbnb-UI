@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { Message } from '../Models/messages'; // Adjust the path as per your structure
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environment/environment';
+import { ApplicationUser } from '../Models/applicationUser';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,18 @@ export class ChatService {
     private messageReceivedSource = new BehaviorSubject<Message | null>(null);
     public messageReceived = this.messageReceivedSource.asObservable();
 
+    private unreadMessagesCount = new BehaviorSubject<number>(0);
+    public unreadMessagesCount$ = this.unreadMessagesCount.asObservable();
+
     baseUrl = environment.API_URL;
 
     constructor(private http : HttpClient) {
         this.buildConnection();
         this.startConnection();
+    }
+
+    updateUnreadMessagesCount(count: number) {
+      this.unreadMessagesCount.next(count);
     }
 
     private buildConnection() {
@@ -48,5 +56,26 @@ export class ChatService {
 
     getReceivedMessages(senderId:string, userId:string): Observable<Message[]>{
       return this.http.get<Message[]>(this.baseUrl+"messages/get-received-messages/"+senderId+"/"+userId);
+    }
+
+    getUnreadMessagesCount(userId:string): Observable<number>{
+      this.http.get<number>(this.baseUrl+"messages/unread-message-count/"+userId).subscribe({
+        next:(value:number)=>{
+          this.unreadMessagesCount.next(value);
+        }
+      })
+      return this.http.get<number>(this.baseUrl+"messages/unread-message-count/"+userId);
+    }
+
+    getAllSendersUsers(userId:string): Observable<ApplicationUser[]>{
+      return this.http.get<ApplicationUser[]>(this.baseUrl+"messages/all-senders-users/"+userId)
+    }
+
+    readMessages(senderId:string, receiverId:string): Observable<Message[]>{
+      return this.http.post<Message[]>(this.baseUrl+"messages/read-messages/"+senderId+"/"+receiverId, {})
+    }
+
+    unreadsPerUser(senderId:string, receiverId:string): Observable<number>{
+      return this.http.get<number>(this.baseUrl+"messages/unread-messages-count-per-user/"+senderId+"/"+receiverId);
     }
 }

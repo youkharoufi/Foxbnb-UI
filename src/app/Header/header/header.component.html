@@ -11,12 +11,12 @@
                   <!-- ***** Menu Start ***** -->
                   <ul class="nav">
                     <li class="hand"><a href="index.html" class="active">Home</a></li>
-                    <li class="hand"><a href="contact.html">Contact Us</a></li>
+                    <li class="hand"><a routerLink="/reservations-summary">Your Reservations</a></li>
                     <li class="hand"><a routerLink="/property-list">Properties</a></li>
                     <li class="hand" *ngIf="(user$ | async) === null"(click)="openLoginDialog()"><a>Login</a></li>
                     <li class="hand" *ngIf="(user$ | async) === null" (click)="openRegisterDialog()"><a>Register</a></li>
                     <li class="hand" *ngIf="(user$ | async) !== null" (click)="logout()"><a>Logout</a></li>
-                    <li class="hand" ><a href="#"><i class="fa fa-calendar"></i>Chat</a></li>
+                    <li><a routerLink="users-menu" *ngIf="(user$ | async) !== null" mat-raised-button color="primary" [matBadge]="unreadMessagesCount$ | async" matBadgeColor="warn"><mat-icon>chat</mat-icon>Chat</a></li>
                 </ul>
                   <a class='menu-trigger'>
                       <span>Menu</span>

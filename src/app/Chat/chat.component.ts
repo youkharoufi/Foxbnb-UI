@@ -8,7 +8,6 @@ import {MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
 import { ChatService } from '../Services/chat.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { v4 as uuidv4 } from 'uuid';
-import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -20,7 +19,7 @@ import { forkJoin } from 'rxjs';
 })
 export class ChatComponent implements OnInit{
 
-  owner!:ApplicationUser;
+  otherUser!:ApplicationUser;
   currentUser!:ApplicationUser;
   today = new Date();
 
@@ -29,7 +28,7 @@ export class ChatComponent implements OnInit{
 
   combinedMessages!:Message[];
 
-  te3= this.chatService.messageReceived
+  te3= this.chatService.messageReceived;
 
   newMessage='';
   chatForm!:NgForm;
@@ -50,21 +49,21 @@ export class ChatComponent implements OnInit{
   ngOnInit(): void{
     this.route.params.subscribe({
       next:(value:Params)=>{
-        this.userService.getUserById(value['ownerId']).subscribe({
+        this.userService.getUserById(value['otherUserId']).subscribe({
           next:(value:ApplicationUser)=>{
-            this.owner = value;
+            this.otherUser = value;
             const localUser = JSON.parse(localStorage.getItem('user')!);
 
     if(localUser !== null && localUser !== undefined){
       this.currentUser = localUser;
-      this.chatService.getReceivedMessages(this.currentUser.id!, this.owner.id!).subscribe({
+      this.chatService.getReceivedMessages(this.currentUser.id!, this.otherUser.id!).subscribe({
         next:(values:Message[])=>{
           this.receivedMessages = values;
           this.combineAndSortMessages();
         }
       })
 
-      this.chatService.getSentMessages(this.currentUser.id!, this.owner.id!).subscribe({
+      this.chatService.getSentMessages(this.currentUser.id!, this.otherUser.id!).subscribe({
         next:(values:Message[])=>{
           this.sentMessages = values;
           this.combineAndSortMessages();
@@ -77,6 +76,12 @@ export class ChatComponent implements OnInit{
           this.combineAndSortMessages();
         }
       });
+
+      this.chatService.readMessages(this.otherUser.id!, this.currentUser.id!).subscribe({
+        next:(value:Message[])=>{
+          console.log("Messages read !")
+        }
+      })
       }
       else{
         this.openSnackBar();
@@ -106,7 +111,7 @@ combineAndSortMessages(): void {
 
 
   sendMessage(){
-    if (!this.currentUser?.id || !this.owner?.id || !this.newMessage) {
+    if (!this.currentUser?.id || !this.otherUser?.id || !this.newMessage) {
       console.error('Error: Missing data for sending message');
       return;
     }
@@ -119,7 +124,7 @@ combineAndSortMessages(): void {
     const newMessage: Message = {
       id:uuidv4(),
       senderId:this.currentUser.id!,
-      receiverId:this.owner.id!,
+      receiverId:this.otherUser.id!,
       dateSent:date,
       read:false,
       content:this.newMessage

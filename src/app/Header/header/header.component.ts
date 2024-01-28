@@ -1,3 +1,4 @@
+import { ChatService } from './../../Services/chat.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
@@ -6,12 +7,17 @@ import { RegisterDialogComponent } from '../../Dialogs/register-dialog/register-
 import { UserService } from '../../Services/user.service';
 import { ApplicationUser } from '../../Models/applicationUser';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import {MatBadgeModule} from '@angular/material/badge';
+import {MatIconModule} from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatDialogModule],
+  imports: [CommonModule, RouterModule, MatDialogModule, MatBadgeModule, MatIconModule,
+  MatButtonModule],
   providers:[UserService, provideAnimations()],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
@@ -21,7 +27,10 @@ export class HeaderComponent {
   user?: ApplicationUser;
   user$ = this.userService.user$;
 
-  constructor(private dialog: MatDialog, private userService: UserService){}
+  unreadMessagesCount$ = this.chatService.unreadMessagesCount$;
+
+  constructor(private dialog: MatDialog, private userService: UserService,
+    private chatService: ChatService, private router: Router){}
 
   ngOnInit(): void{
     const userConnected = JSON.parse(localStorage.getItem('user')!);
@@ -29,7 +38,18 @@ export class HeaderComponent {
     if(userConnected !== undefined && userConnected !== null){
       this.user = JSON.parse(localStorage.getItem('user')!);
       this.userService.updateUser(this.user!);
+
+      this.chatService.getUnreadMessagesCount(this.user?.id!).subscribe({
+        next:(value:number)=>{
+          this.chatService.updateUnreadMessagesCount(value);
+        }
+      })
+
+
     }
+
+
+
   }
 
   openLoginDialog(){
@@ -54,6 +74,8 @@ export class HeaderComponent {
   }
 
   logout(){
+
     this.userService.logout();
+    this.router.navigate(['/property-list']);
   }
 }
