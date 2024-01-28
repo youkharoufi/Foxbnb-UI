@@ -1,27 +1,20 @@
-# FoxBnB
+# Airbnb type application named ✨FoxBnb : 
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.9.
 
-## Development server
+## Start the app
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+To start the development server run `ng serve` and open your browser, then navigate to localhost:4200
+# MSN
 
-## Code scaffolding
+FoxBnb is a travel planning application that allows you to choose a house destination, book the dates of your stay via an interactive calendar, and even chat with the owners of the house you are planning to
+stay at (thanks to the implementation of SignalR) ! It goes in pair with the Foxbnb API that you can find in my repositories.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Usage
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+You can see that there are seed users already to help you use the app without having to register with your actual email address.
+You can log in as a customer (credentials: Email:youssef@foxbnb.com Password:Foxbnb123!) or as an owner (credentials: Email: estelle@foxbnb.com Password:Foxbnb123!).
+As a customer you can check out the houses, pick one, book some days to stay and chat with the owner of the house to get more details. Once a user has booked a period in 
+the MatDatePicker calendar, it is impossible to bookm the same dates as they appear blurred and unselectable.
 
-## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
